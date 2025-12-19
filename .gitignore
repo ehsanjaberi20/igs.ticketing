@@ -1,0 +1,11 @@
+/.vs
+/.idea
+/IGS.Ticketing.Service/obj
+/IGS.Ticketing.Service/bin
+/IGS.Ticketing.Service.Business/bin
+/IGS.Ticketing.Service.Business/obj
+/IGS.Ticketing.Service.Common/bin
+/IGS.Ticketing.Service.Common/obj
+/IGS.Ticketing.Service.DataLayer/bin
+/IGS.Ticketing.Service.DataLayer/obj
+/IGS.Ticketing.UI/obj

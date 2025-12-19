@@ -1,0 +1,38 @@
+﻿@IGS.Ticketing.Service_HostAddress = http://localhost:5054
+@IGS.Ticketing.Service_HostAddress1 = https://localhost:7058
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDY0MDU0OTIyNSIsImp0aSI6IjAyZThhMzFmLWMxYWQtNDVkNi1iNGM5LTIzZjQwN2M2YzU2YiIsImV4cCI6MTc2MjI2MzkxOCwiaXNzIjoiSUdTLlRpY2tldGluZy5TZXJ2aWNlIiwiYXVkIjoiSUdTLlRpY2tldGluZy5TZXJ2aWNlLlVzZXJzIn0.qM5aXnU6Lm1c230-LCkWEo7OKGRtC8GAs654gCplOus
+###
+POST {{IGS.Ticketing.Service_HostAddress}}/api/auth/register
+Content-Type: application/json
+{
+  "usrNameStr": "احسان",
+  "usrFamilyStr": "جابری",
+  "usrNationalCodeStr": "0640549226",
+  "usrPhoneNumberStr": "09157932340",
+  "usrGenderTny": 1,
+  "usrStatusTny": 1,
+  "usrRoleTny": 1,
+  "password": "2020"
+}
+
+###
+POST {{IGS.Ticketing.Service_HostAddress}}/api/auth/login
+Content-Type: application/json
+{
+  "username": "0640549225",
+  "password": "1010"
+}
+
+###
+POST {{IGS.Ticketing.Service_HostAddress}}/api/auth/profile
+withCredentials: true
+//Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDY0MDU0OTIyNSIsImp0aSI6IjMwZjNhMWZhLWI0MWYtNDkyZi1hMDIwLTNmOWIzNTEzZGEyOCIsImV4cCI6MTc2NjE0NTM5MywiaXNzIjoiSUdTLlRpY2tldGluZy5TZXJ2aWNlIiwiYXVkIjoiSUdTLlRpY2tldGluZy5TZXJ2aWNlLlVzZXJzIn0.XJYz23Pv8DExipjOA1Gm2pFRiv9ju9vnIkURJ4p4eAM
+
+
+###
+GET {{IGS.Ticketing.Service_HostAddress}}/api/auth/secure
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDY0MDU0OTIyNSIsImp0aSI6ImU0YWZmMjkxLTNiN2MtNGYyOS1hOTExLTE5ZTcyNzYzMGEzNiIsImV4cCI6MTc2MjQ0NDM4OSwiaXNzIjoiSUdTLlRpY2tldGluZy5TZXJ2aWNlIiwiYXVkIjoiSUdTLlRpY2tldGluZy5TZXJ2aWNlLlVzZXJzIn0.r07WlCn8mwvLPLMrc35hoX5JhfXhiF1X3ysKJusgTow
+
+
+###
+POST {{IGS.Ticketing.Service_HostAddress}}/api/auth/GetSecurityTree
