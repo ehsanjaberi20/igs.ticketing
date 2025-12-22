@@ -44,7 +44,7 @@ namespace IGS.Ticketing.Service.Middelware
 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/json";
-
+                
                 // پیام ثابت برای کاربر نهایی
                 var result = JsonSerializer.Serialize(new
                 {

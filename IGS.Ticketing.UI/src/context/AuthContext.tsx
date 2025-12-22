@@ -1,7 +1,8 @@
 import React, {createContext, type ReactNode, useContext, useEffect, useState} from "react";
-import type {IAuthContext, IProfile} from "../interface";
+import type {IAuthContext, IProfile} from "@/interface";
 import {getProfile, login, logout} from "../api/auth.ts";
 import {Utils} from "../components/Utils.tsx";
+import type {IApiError} from "@/api/api.ts";
 
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
@@ -16,7 +17,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 const profile = await getProfile();
                 setUser(profile);
             } catch(error) {
-                Utils.notify(error.message);
+                if((error as IApiError).status !== 401)
+                    Utils.notify((error as IApiError).message, 'error');
                 setUser(null);
             } finally {
                 setLoading(false);

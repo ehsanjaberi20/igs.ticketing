@@ -1,6 +1,6 @@
 import type {ILoginResponse} from "../interface/ILoginResponse.ts";
-import type {IProfile} from "../interface";
 import {API} from "./api.ts";
+import type {IProfile} from "@/interface";
 
 
 export const login = async (username: string, password: string): Promise<ILoginResponse> => {

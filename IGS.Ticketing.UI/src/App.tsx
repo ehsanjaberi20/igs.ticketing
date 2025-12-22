@@ -9,13 +9,9 @@ function App() {
         <AuthProvider>
             <Layout/>
             <Toaster duration={2000}
+                     richColors={true}
+                     closeButton={true}
                      position='top-center'/>
-            {/*<Toaster*/}
-            {/*    position="top-center"*/}
-            {/*    toastOptions={{*/}
-            {/*        className: 'text-sm',*/}
-            {/*    }}*/}
-            {/*/>*/}
         </AuthProvider>
     )
 }

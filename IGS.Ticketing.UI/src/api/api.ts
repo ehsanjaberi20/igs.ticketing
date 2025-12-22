@@ -5,22 +5,25 @@ export const API = axios.create({
     withCredentials: true,
 });
 export interface IApiError {
+    code?: string | "VALIDATION_ERROR";
     message: string;
     status?: number;
+    details?: object;
 }
 API.interceptors.response.use(
     (response: AxiosResponse) => response,
     async (error: AxiosError) => {
-        console.log(error);
         const apiError: IApiError = { message: "Something went wrong" };
+        apiError.code = error.code;
+        apiError.status = error.status;
 
+        console.log(error)
         if (error.response) {
-            apiError.status = error.response.status;
-            apiError.message = error.response.data?.message || error.message;
+            apiError.code = error.response.data?.error?.code  || error.code;
+            apiError.message = error.response.data?.error?.message  || error.message;
+            apiError.details = error.response.data?.error?.details  || {};
 
-            // مثال: اگر توکن منقضی شده باشد
             if (error.response.status === 401) {
-                // می‌توانید اینجا refresh token بزنید یا کاربر را logout کنید
                 console.log("Unauthorized! Maybe refresh token is needed");
             }
         } else if (error.request) {

@@ -3,7 +3,8 @@ import {RiEyeCloseLine, RiEyeLine} from "react-icons/ri";
 import {useAuth} from "../../context/AuthContext.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import {toast} from "sonner";
+import {Utils} from "@/components/Utils.tsx";
+import type {IApiError} from "@/api/api.ts";
 
 export default function Login(): JSX.Element {
     const { loginUser } = useAuth();
@@ -19,35 +20,19 @@ export default function Login(): JSX.Element {
         if (!username) e.username = "نام کاربری را وارد کنید";
 
         if (!password) e.password = "رمز عبور را وارد کنید";
-        // else if (password.length < 6) e.password = "رمز حداقل باید ۶ کاراکتر باشد";
         setErrors(e);
         return Object.keys(e).length === 0;
     }
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-
-        toast.error("پیام دریافتی از سرور", {
-            richColors: true,
-            closeButton: true,
-            //unstyled: true,
-            description: "بروز خطای ناشناخته لطفا با مدیر سیستم تماس بگیرید",
-            // action: {
-            //     label: "Undo",
-            //     onClick: () => console.log("Undo"),
-            // },
-        })
-        return;
         if (!validate()) return;
         setLoading(true);
         try {
             await loginUser(username, password);
-            // شبیه‌سازی ارسال فرم (در پروژه واقعی این‌جا درخواست به API می‌رود)
-            //await new Promise((r) => setTimeout(r, 800));
             setLoading(false);
-            //alert("ورود موفق — این یک نمونه است!");
         } catch (error) {
-            console.log(error);
+            Utils.notifyException(error as IApiError);
             setLoading(false);
         }
 
