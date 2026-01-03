@@ -3,10 +3,14 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
-
+html{
+    overflow: hidden;
+}
 body {
     font-family: Vazirmatn FD, serif;
     margin: auto;
+    overflow: auto;
+    height: 100vh;
 }
 
 @theme inline {

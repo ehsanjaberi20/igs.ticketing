@@ -20,9 +20,9 @@ namespace IGS.Ticketing.Service.DataLayer.Database
         {
             return connection.QueryAsync<T>(sql, parameters, commandTimeout: commandTimeout);
         }
-        public static Task<T> ReadFirst<T>(IDbConnection connection, string sql, Dictionary<string, object>? parameters = null, int commandTimeout = 30)
+        public static Task<T?> ReadFirst<T>(IDbConnection connection, string sql, Dictionary<string, object>? parameters = null, int commandTimeout = 30)
         {
-            return connection.QueryFirstAsync<T>(sql, parameters, commandTimeout: commandTimeout);
+            return connection.QueryFirstOrDefaultAsync<T>(sql, parameters, commandTimeout: commandTimeout);
         }
         public static Task<int> ExecuteAsync(IDbConnection connection, string sql, Dictionary<string, object>? parameters = null, int commandTimeout = 30, IDbTransaction? transaction = null)
         {

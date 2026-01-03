@@ -99,8 +99,7 @@ export default function Login(): JSX.Element {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="●●●●●●●●"
-                                    className="h-12"
-                                    //className="w-full px-4 py-3 rounded-xl bg-transparent outline-none pl-12 placeholder:opacity-50"
+                                    className="h-12 placeholder:opacity-50"
                                     aria-invalid={!!errors.password}
                                 />
 

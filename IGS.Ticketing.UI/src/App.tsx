@@ -9,6 +9,9 @@ function App() {
         <AuthProvider>
             <Layout/>
             <Toaster duration={2000}
+                     style={{
+                         fontFamily: 'Vazirmatn FD'
+                     }}
                      richColors={true}
                      closeButton={true}
                      position='top-center'/>

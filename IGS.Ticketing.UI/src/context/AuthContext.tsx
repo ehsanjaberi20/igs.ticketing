@@ -7,18 +7,20 @@ import type {IApiError} from "@/api/api.ts";
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [user, setUser] = useState<IProfile | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<IApiError | null>(null);
 
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 const profile = await getProfile();
                 setUser(profile);
-            } catch(error) {
-                if((error as IApiError).status !== 401)
-                    Utils.notify((error as IApiError).message, 'error');
+            } catch (error) {
+                setError(error as IApiError);
+                if ((error as IApiError).status !== 401)
+                    Utils.notifyException(error as IApiError);
                 setUser(null);
             } finally {
                 setLoading(false);
@@ -38,7 +40,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setUser(null);
     };
     return (
-        <AuthContext.Provider value={{ user, loginUser, logoutUser, loading }}>
+        <AuthContext.Provider value={{user, loginUser, logoutUser, loading, error}}>
             {children}
         </AuthContext.Provider>
     );

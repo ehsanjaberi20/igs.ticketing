@@ -117,10 +117,11 @@ select * from dbo.Users
             {
                 Dictionary<string, object> inParams = new Dictionary<string, object>();
                 inParams.Add("usrNationalCodeStr", nationalIdStr);
-                return DbHelper.ReadFirst<User>(connection, @"
+                var res = DbHelper.ReadFirst<User>(connection, @"
 select * from dbo.Users
  where usrNationalCodeStr=@usrNationalCodeStr
-", inParams).Result;
+", inParams);
+                return res.Result;
             }
             catch (Exception)
             {
