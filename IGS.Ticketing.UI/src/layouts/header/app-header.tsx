@@ -2,13 +2,20 @@ import {SidebarTrigger} from "@/components/ui/sidebar.tsx";
 import {Separator} from "@/components/ui/separator.tsx";
 import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {LogOut} from "lucide-react";
+import {LogOut, Moon, Sun} from "lucide-react";
 import {useAuth} from "@/context/AuthContext.tsx";
+import {useTheme} from "next-themes";
 
-export const APPHeader = ()=>{
+export const APPHeader = () => {
     const {user, logoutUser} = useAuth();
+    const {setTheme, theme} = useTheme()
+
+    const toggleDarkMode = () => {
+        setTheme(theme === 'light' ? "dark" : "light");
+    }
     return (
-        <header className=' sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4 backdrop-blur-sm bg-white/70'>
+        <header
+            className='z-10 sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4 backdrop-blur-sm bg-white/70 dark:bg-white/10'>
             <SidebarTrigger className="-ml-1"/>
             <Separator
                 orientation="vertical"
@@ -22,6 +29,14 @@ export const APPHeader = ()=>{
                             </span>
                 </li>
                 <li>
+                    <Button variant="outline" size="icon" aria-label="Submit" onClick={toggleDarkMode}
+                            className='hover:bg-gray-200 dark:hover:bg-gray-600'>
+                        {theme==='light' ? <Moon/>: <Sun/>}
+
+                    </Button>
+                </li>
+                <li>
+
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <Button variant="outline" size="icon" aria-label="Submit" onClick={logoutUser}
