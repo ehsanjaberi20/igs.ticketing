@@ -10,7 +10,7 @@ export const Utils = {
     notifyException: (error: IApiError): void => {
         let description: string = "";
         if (error.code === "VALIDATION_ERROR")
-            description = Object.values(error.details).map((value) => `* ${value}`).join("\n");
+            description = Object.values(error.details ?? {}).map((value) => `* ${value}`).join("\n");
         Utils.notify(error.message, "error", description);
     }
 }

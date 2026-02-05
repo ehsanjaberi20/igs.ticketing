@@ -23,13 +23,7 @@ namespace IGS.Ticketing.Service.Controllers
             this._userService = userService;
             this._permissionService = permissionService;
         }
-        [HttpPost("register")]
-        public IActionResult Register([FromBody] RegisterDto register)
-        {
-            var result = _userService.Insert(register);
-            return Ok(new { result });
-
-        }
+        
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginDto login)
         {

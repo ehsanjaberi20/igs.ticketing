@@ -13,7 +13,7 @@ namespace IGS.Ticketing.Service.Common.IService
         int Insert(RegisterDto registerDto);
         void Update(int usrVCodeInt, User user);
         void Delete(int usrVCodeInt);
-        List<User> FillGrid(int pagenumber, int pageSize, string sortBy, string search);
+        (List<User> list, int count) FillGrid(int pagenumber, int pageSize, string sortBy, string search);
         User Find(int usrVCodeInt);
         User Find(string nationalIdStr);
 

@@ -43,7 +43,7 @@ namespace IGS.Ticketing.Service.Business.Service
             throw new NotImplementedException();
         }
 
-        public List<User> FillGrid(int pagenumber, int pageSize, string sortBy, string search)
+        public (List<User> list, int count) FillGrid(int pagenumber, int pageSize, string sortBy, string search)
         {
             return _userDal.FillGrid(pagenumber, pageSize, sortBy, search);
         }

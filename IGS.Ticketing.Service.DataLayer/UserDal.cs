@@ -9,7 +9,7 @@ namespace IGS.Ticketing.Service.DataLayer
         int Insert(User user);
         void Update(int usrVCodeInt, User user);
         void Delete(int usrVCodeInt);
-        List<User> FillGrid(int pagenumber, int pageSize, string sortBy, string search);
+        (List<User> list, int count) FillGrid(int pagenumber, int pageSize, string sortBy, string search);
         User Find(int usrVCodeInt);
         User Find(string nationalIdStr);
     }
@@ -81,7 +81,7 @@ SELECT CAST(SCOPE_IDENTITY() as int);
             throw new NotImplementedException();
         }
 
-        public List<User> FillGrid(int pagenumber, int pageSize, string sortBy, string search)
+        public (List<User> list, int count) FillGrid(int pagenumber, int pageSize, string sortBy, string search)
         {
             var connection = _dbConnectionFactory.CreateConnection();
             try
@@ -91,9 +91,10 @@ SELECT CAST(SCOPE_IDENTITY() as int);
                 inParams.Add("pageSize", pageSize);
                 inParams.Add("sortBy", sortBy);
                 inParams.Add("search", search);
-                return DbHelper.ReadData<User>(connection, @"
+                var result = DbHelper.ReadData<User>(connection, @"
 select * from dbo.Users
 ", inParams).Result.ToList();
+                return (result, 0);
             }
             catch (Exception)
             {

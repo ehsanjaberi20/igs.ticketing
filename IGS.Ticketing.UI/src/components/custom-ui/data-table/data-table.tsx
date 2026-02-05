@@ -10,29 +10,34 @@ import {
     type ColumnDef, type ExpandedState,
     flexRender,
     getCoreRowModel, getExpandedRowModel,
-    getFilteredRowModel,
-    getGroupedRowModel,
     useReactTable
 } from "@tanstack/react-table";
 import {Fragment, useState} from "react";
-import {Input} from "@/components/ui/input.tsx";
-import {ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger} from "@/components/ui/context-menu.tsx";
-
+import {TableLoading} from "@/components/custom-ui/data-table/table-loading.tsx";
+import {ColumnTransformation} from "@/components/custom-ui/data-table/table-utils.tsx";
+import CustomContextMenu, {type ContextMenuItemProps} from "@/components/custom-ui/context-menu/context-menu.tsx";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    loading?: boolean,
+    multiselect?: boolean,
+    expandable?: boolean,
+    rowContextMenu?: (row: TData) => ContextMenuItemProps[],
 }
 
-export function DataTable<TData, TValue>({data, columns}: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue = unknown>(props: DataTableProps<TData, TValue>) {
+    const {data, columns, loading = false, expandable = false, multiselect = false, rowContextMenu} = props;
     const [rowSelection, setRowSelection] = useState({})
-    const [expanded, setExpanded] = useState<ExpandedState>({})
+    const [expanded, setExpanded] = useState<ExpandedState>({5: true})
 
     const table = useReactTable({
-        data, columns, getCoreRowModel: getCoreRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
+        data,
+        columns: ColumnTransformation(columns, multiselect, expandable),
+        getCoreRowModel: getCoreRowModel(),
+        // getFilteredRowModel: getFilteredRowModel(),
         onRowSelectionChange: setRowSelection,
-        getRowCanExpand: (row) => true, // Add your logic to determine if a row can be expanded. True means all rows include expanded data
+        getRowCanExpand: (_) => expandable, // Add your logic to determine if a row can be expanded. True means all rows include expanded data
         getExpandedRowModel: getExpandedRowModel(),
         onExpandedChange: setExpanded,
         manualPagination: true, //turn off client-side pagination
@@ -44,30 +49,29 @@ export function DataTable<TData, TValue>({data, columns}: DataTableProps<TData, 
         state: {
             rowSelection: rowSelection,
             expanded: expanded, // must pass expanded state back to the table
-
         }
     })
-
     return (
         <Fragment>
-            <div className="flex items-center py-4">
-                <Input
-                    placeholder="Filter invoice..."
-                    value={(table.getColumn("invoice")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("invoice")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
-            </div>
+            {/*<div className="flex items-center py-4">*/}
+            {/*    <Input*/}
+            {/*        placeholder="Filter invoice..."*/}
+            {/*        value={(table.getColumn("invoice")?.getFilterValue() as string) ?? ""}*/}
+            {/*        onChange={(event) =>*/}
+            {/*            table.getColumn("invoice")?.setFilterValue(event.target.value)*/}
+            {/*        }*/}
+            {/*        className="max-w-sm"*/}
+            {/*    />*/}
+            {/*</div>*/}
             <Table className='mt-2'>
                 {/*<TableCaption>A list of your recent invoices.</TableCaption>*/}
                 <TableHeader className='text-center'>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
                             {headerGroup.headers.map((header) => {
+                                header.getSize()
                                 return (
-                                    <TableHead key={header.id} style={{ width: header.getSize()+'px'}}>
+                                    <TableHead key={header.id} style={{width: header.getSize() + 'px'}}>
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(
@@ -81,14 +85,13 @@ export function DataTable<TData, TValue>({data, columns}: DataTableProps<TData, 
                         </TableRow>
                     ))}
                 </TableHeader>
-                <TableBody>
-                    {table.getRowModel().rows?.length ? (
-                        table.getRowModel().rows.map((row) => (
-                            <Fragment key={row.id}>
-                                <ContextMenu modal={false}>
-                                    <ContextMenuTrigger asChild>
+                <TableLoading loading={loading} rowcount={10}>
+                    <TableBody>
+                        {table.getRowModel().rows?.length ? (
+                            table.getRowModel().rows.map((row) => (
+                                <Fragment key={row.id}>
+                                    <CustomContextMenu items={rowContextMenu ? rowContextMenu(row.original) : []}>
                                         <TableRow
-                                            // key={row.id}
                                             data-state={row.getIsSelected() && "selected"}
                                         >
                                             {row.getVisibleCells().map((cell) => (
@@ -98,50 +101,46 @@ export function DataTable<TData, TValue>({data, columns}: DataTableProps<TData, 
                                             ))}
 
                                         </TableRow>
-                                    </ContextMenuTrigger>
-                                    <ContextMenuContent>
-                                        <ContextMenuItem>Profile</ContextMenuItem>
-                                        <ContextMenuItem>Billing</ContextMenuItem>
-                                        <ContextMenuItem>Team</ContextMenuItem>
-                                        <ContextMenuItem>Subscription</ContextMenuItem>
-                                    </ContextMenuContent>
-                                </ContextMenu>
+                                    </CustomContextMenu>
 
-                                {row.getIsExpanded() && (
-                                    <TableRow>
-                                        <TableCell className='p-2' colSpan={row.getAllCells().length}>
-                                            زیر فرم
-                                            <b>sf</b>
-                                            <p>sdsfh</p>
-                                        </TableCell>
-                                    </TableRow>
-                                )}
-                            </Fragment>
-                        ))
-                    ) : (
-                        <TableRow>
-                            <TableCell colSpan={columns.length} className="h-24 text-center">
-                                No results.
-                            </TableCell>
-                        </TableRow>
-                    )}
-                </TableBody>
-                <TableFooter>
-                    {table.getFooterGroups().map((footerGroup) => (
-                        <TableRow key={footerGroup.id}>
-                            {footerGroup.headers.map((header) => (
-                                <TableCell key={header.id}>
-                                    {header.isPlaceholder
-                                        ? null
-                                        : flexRender(
-                                            header.column.columnDef.footer,
-                                            header.getContext(),
-                                        )}
+
+                                    {row.getIsExpanded() && (
+                                        <TableRow>
+                                            <TableCell className='p-2' colSpan={row.getAllCells().length}>
+                                                زیر فرم
+                                                <b>sf</b>
+                                                <p>sdsfh</p>
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+                                </Fragment>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={columns.length} className="h-24 text-center">
+                                    No results.
                                 </TableCell>
-                            ))}
-                        </TableRow>
-                    ))}
-                </TableFooter>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        {table.getFooterGroups().map((footerGroup) => (
+                            <TableRow key={footerGroup.id}>
+                                {footerGroup.headers.map((header) => (
+                                    <TableCell key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                header.column.columnDef.footer,
+                                                header.getContext(),
+                                            )}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        ))}
+                    </TableFooter>
+                </TableLoading>
+
             </Table>
         </Fragment>
 

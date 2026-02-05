@@ -12,12 +12,12 @@ export interface IApiError {
 }
 API.interceptors.response.use(
     (response: AxiosResponse) => response,
-    async (error: AxiosError) => {
+    async (error: AxiosError<{error: {code: string, message: string, details: any}}>) => {
+        // comment
         const apiError: IApiError = { message: "Something went wrong" };
         apiError.code = error.code;
         apiError.status = error.status;
 
-        console.log(error)
         if (error.response) {
             apiError.code = error.response.data?.error?.code  || error.code;
             apiError.message = error.response.data?.error?.message  || error.message;
